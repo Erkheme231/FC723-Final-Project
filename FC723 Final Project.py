@@ -19,6 +19,8 @@ class SeatBookingSystem:
             return
         if seat not in self.available_seats:
             print(f'Sorry, seat {seat} is not available.')
+        elif seat in self.booked_seats:
+            print(f'Seat {seat} is already booked.')
         else:
             self.available_seats.remove(seat)
             self.booked_seats.append(seat)
@@ -46,6 +48,8 @@ class SeatBookingSystem:
         # Check if the given seat is available
         if seat.upper() in self.available_seats:  # Convert seat to uppercase
             print(f'Seat {seat} is available.')
+        elif seat.upper() in self.booked_seats:
+            print(f'Seat {seat} is already booked.')
         else:
             print(f'Seat {seat} is not available.')
 
