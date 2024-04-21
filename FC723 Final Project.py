@@ -3,47 +3,47 @@ class SeatBookingSystem:
         # Initialize the floor plan with 'F' for free seats and 'X' for aisles
         self.rows = rows
         self.columns = columns
-        self.floor_plan = []
-        for i in range(self.rows):
-            row = [f"{i + 1}{chr(j + 65)}" for j in range(self.columns)]
-            self.floor_plan.append(row)
+        self.available_seats = [f"{i+1}{chr(j+65)}" for i in range(self.rows) for j in range(self.columns)]
+        self.booked_seats = []
 
     def display_seats(self):
         # Display the current seating arrangement
-        for row in self.floor_plan:
-            print(' '.join(row))
+        for i in range(0, len(self.available_seats), self.columns):
+            print(' '.join(self.available_seats[i:i+self.columns]))
 
     def book_seat(self, seat):
         # Book the given seat if available
-        for row in self.floor_plan:
-            if seat in row and row[row.index(seat)] == 'F':
-                row[row.index(seat)] = 'R'
-                print(f'Seat {seat} booked successfully.')
-                return
-        print(f'Sorry, seat {seat} is not available.')
+        if seat in self.available_seats:
+            self.available_seats.remove(seat)
+            self.booked_seats.append(seat)
+            print(f'Seat {seat} booked successfully.')
+        else:
+            print(f'Sorry, seat {seat} is not available.')
 
     def free_seat(self, seat):
         # Free the given seat if booked
-        for row in self.floor_plan:
-            if seat in row and row[row.index(seat)] == 'R':
-                row[row.index(seat)] = 'F'
-                print(f'Seat {seat} freed successfully.')
-                return
-        print(f'No booking found for seat {seat}.')
+        if seat in self.booked_seats:
+            self.booked_seats.remove(seat)
+            self.available_seats.append(seat)
+            self.available_seats.sort()  # Ensure seats are sorted after adding
+            print(f'Seat {seat} freed successfully.')
+        else:
+            print(f'No booking found for seat {seat}.')
 
     def show_booking_state(self):
         # Display the current booking state
-        for row in self.floor_plan:
-            print(' '.join(row))
+        print("Available seats:")
+        self.display_seats()
+        print("\nBooked seats:")
+        for seat in self.booked_seats:
+            print(seat)
 
     def check_availability(self, seat):
         # Check if the given seat is available
-        for row in self.floor_plan:
-            if seat in row and row[row.index(seat)] == 'F':
-                print(f'Seat {seat} is available.')
-                return
-        print(f'Seat {seat} is not available.')
-
+        if seat in self.available_seats:
+            print(f'Seat {seat} is available.')
+        else:
+            print(f'Seat {seat} is not available.')
 
 # Main function to drive the program
 if __name__ == "__main__":
