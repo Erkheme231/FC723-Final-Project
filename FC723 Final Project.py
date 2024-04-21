@@ -13,12 +13,16 @@ class SeatBookingSystem:
 
     def book_seat(self, seat):
         # Book the given seat if available
-        if seat in self.available_seats:
+        seat = seat.upper()  # Convert seat to uppercase
+        if not self._is_valid_seat(seat):
+            print(f'Invalid seat format. Please enter the seat in the format "RowLetter" (e.g., "1A", "2B", etc.).')
+            return
+        if seat not in self.available_seats:
+            print(f'Sorry, seat {seat} is not available.')
+        else:
             self.available_seats.remove(seat)
             self.booked_seats.append(seat)
             print(f'Seat {seat} booked successfully.')
-        else:
-            print(f'Sorry, seat {seat} is not available.')
 
     def free_seat(self, seat):
         # Free the given seat if booked
@@ -40,10 +44,14 @@ class SeatBookingSystem:
 
     def check_availability(self, seat):
         # Check if the given seat is available
-        if seat in self.available_seats:
+        if seat.upper() in self.available_seats:  # Convert seat to uppercase
             print(f'Seat {seat} is available.')
         else:
             print(f'Seat {seat} is not available.')
+
+    def _is_valid_seat(self, seat):
+        # Check if the seat format is valid (e.g., "1A", "2B", etc.)
+        return len(seat) == 2 and seat[0].isdigit() and seat[1].isalpha() and seat[1].upper() in [chr(i) for i in range(65, 65+self.columns)]
 
 # Main function to drive the program
 if __name__ == "__main__":
